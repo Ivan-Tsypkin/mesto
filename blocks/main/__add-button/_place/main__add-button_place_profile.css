@@ -1,0 +1,12 @@
+.main__add-button_place_profile {
+  margin-left: auto;
+}
+
+@media screen and (max-width: 618px) {
+  .main__add-button_place_profile {
+    margin: 0;
+    margin-top: 36px;
+    max-width: 100%;
+    width: 100%;
+  }
+}
