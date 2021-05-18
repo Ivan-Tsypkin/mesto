@@ -1,4 +1,4 @@
-.main__like-button {
+.cards__like-button {
   padding: 0;
   border: none;
   font: inherit;
@@ -14,7 +14,11 @@
   transition: opacity 0.5s linear;
 }
 
-.main__like-button:hover {
+.cards__like-button:hover {
   cursor: pointer;
   opacity: 0.5;
+}
+
+.cards__like-button:active {
+  background-image: url(../../../images/Like-heart-active.svg);
 }

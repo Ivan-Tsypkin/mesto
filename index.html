@@ -11,90 +11,86 @@
   <link rel="stylesheet" href="./pages/index.css">
 </head>
 <body class="page">
-  <section class="popup">
-    <div class="popup__container">
-      <button type="button" class="popup__close-button" aria-label="Закрыть окно"></button>
-      <h2 class="popup__heading">Редактировать профиль</h2>
-      <form class="popup__form">
-        <input type="text" class="popup__form-item popup__form-item_value_name" placeholder="Имя" required>
-        <input type="text" class="popup__form-item popup__form-item_value_job" placeholder="Род деятельности" required>
-        <button type="submit" class="popup__submit-button" aria-label="Сохранить профиль">Сохранить</button>
-      </form>
-    </div>
-  </section>
   <div class="page__content">
 
     <header class="header">
-      <img src="./images/Logo.svg" alt="Логотип Место" class="header__logo">
+      <div class="header__logo"></div>
     </header>
 
     <main class="main">
       <section class="profile">
         <img src="./images/Cousteau.png" alt="Аватар" class="profile__avatar">
         <div class="profile__info">
-          <p class="profile__name">Жак-Ив Кусто</p>
+          <h1 class="profile__name">Жак-Ив Кусто</h1>
           <button type="button" class="profile__edit-button" aria-label="Редактировать профиль"></button>
           <p class="profile__job">Исследователь океана</p>
         </div>
-        <button class="main__add-button main__add-button_place_profile" aria-label="Добавить профиль"></button>
+        <button type="button" class="profile__add-button" aria-label="Добавить профиль"></button>
       </section>
 
       <section class="cards">
         <ul class="cards__list">
           <li class="cards__item">
-            <img src="./images/Elbrus.png" alt="Гора Эльбрус" class="cards__image">
+            <img src="./images/Elbrus.png" alt="Гора Эльбрус, Солнце скрылось за вершину" class="cards__image">
             <div class="cards__caption">
-              <p class="cards__image-caption">Эльбрус</p>
-              <button type="button" class="main__like-button" aria-label="Поставить лайк"></button>
+              <h3 class="cards__image-caption">Эльбрус</h3>
+              <button type="button" class="cards__like-button" aria-label="Поставить лайк"></button>
             </div>
           </li>
           <li class="cards__item">
-            <img src="./images/Komi.png" alt="Коми" class="cards__image">
+            <img src="./images/Komi.png" alt="Коми, река, лес, Зима" class="cards__image">
             <div class="cards__caption">
-              <p class="cards__image-caption">Коми</p>
-              <button type="button" class="main__like-button" aria-label="Поставить лайк"></button>
+              <h3 class="cards__image-caption">Коми</h3>
+              <button type="button" class="cards__like-button" aria-label="Поставить лайк"></button>
             </div>
           </li>
           <li class="cards__item">
-            <img src="./images/Moscow.png" alt="Москва" class="cards__image">
+            <img src="./images/Moscow.png" alt="Москва, центр города, день, небоскрёбы" class="cards__image">
             <div class="cards__caption">
-              <p class="cards__image-caption">Москва</p>
-              <button type="button" class="main__like-button" aria-label="Поставить лайк"></button>
+              <h3 class="cards__image-caption">Москва</h3>
+              <button type="button" class="cards__like-button" aria-label="Поставить лайк"></button>
             </div>
           </li>
           <li class="cards__item">
-            <img src="./images/Saint-Petersburg.png" alt="Санкт-Петербург" class="cards__image">
+            <img src="./images/Saint-Petersburg.png" alt="Санкт-Петербург, вечер, разведённый мост" class="cards__image">
             <div class="cards__caption">
-              <p class="cards__image-caption">Санкт-Петербург</p>
-              <button type="button" class="main__like-button" aria-label="Поставить лайк"></button>
+              <h3 class="cards__image-caption">Санкт-Петербург</h3>
+              <button type="button" class="cards__like-button" aria-label="Поставить лайк"></button>
             </div>
           </li>
           <li class="cards__item">
-            <img src="./images/Sochi.png" alt="Сочи" class="cards__image">
+            <img src="./images/Sochi.png" alt="Сочи, побережье, огни ночного города с высоты птичьего полёта" class="cards__image">
             <div class="cards__caption">
-              <p class="cards__image-caption">Сочи</p>
-              <button type="button" class="main__like-button" aria-label="Поставить лайк"></button>
+              <h3 class="cards__image-caption">Сочи</h3>
+              <button type="button" class="cards__like-button" aria-label="Поставить лайк"></button>
             </div>
           </li>
           <li class="cards__item">
-            <img src="./images/Vladivostok.png" alt="Владивосток" class="cards__image">
+            <img src="./images/Vladivostok.png" alt="Владивосток, день, люди смотрят на Золотой мост" class="cards__image">
             <div class="cards__caption">
-              <p class="cards__image-caption">Владивосток</p>
-              <button type="button" class="main__like-button" aria-label="Поставить лайк"></button>
+              <h3 class="cards__image-caption">Владивосток</h3>
+              <button type="button" class="cards__like-button" aria-label="Поставить лайк"></button>
             </div>
           </li>
         </ul>
       </section>
-
-
-
-
     </main>
 
     <footer class="footer">
       <p class="footer__copyright">&copy; 2021. Mesto Russia. Иван Цыпкин</p>
     </footer>
 
+    <div class="popup">
+      <div class="popup__container">
+        <button type="button" class="popup__close-button" aria-label="Закрыть окно"></button>
+        <h3 class="popup__heading">Редактировать профиль</h3>
+        <form class="popup__form" method="POST" name="profileForm">
+          <input type="text" class="popup__form-item popup__form-item_value_name" placeholder="Имя" name="userName" required>
+          <input type="text" class="popup__form-item popup__form-item_value_job" placeholder="Род деятельности" name="userJob" required>
+          <button type="submit" class="popup__submit-button" aria-label="Сохранить профиль">Сохранить</button>
+        </form>
+      </div>
+    </div>
 
   </div>
   <script src='./scripts/main.js'></script>
