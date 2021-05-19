@@ -7,12 +7,11 @@ let jobInput = popup.querySelector('.popup__form-item_value_job');
 let profileName = document.querySelector('.profile__name');
 let profileJob = document.querySelector('.profile__job');
 
-if (!popup.classList.contains('popup_opened')) {
-  nameInput.value = profileName.textContent;
-  jobInput.value = profileJob.textContent;
-}
-
 function togglePopup() {
+  if (!popup.classList.contains('popup_opened')) {
+    nameInput.value = profileName.textContent;
+    jobInput.value = profileJob.textContent;
+  }
   popup.classList.toggle('popup_opened')
 }
 
