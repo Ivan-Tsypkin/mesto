@@ -6,5 +6,5 @@
   justify-content: center;
   row-gap: 20px;
   column-gap: 17px;
-  grid-template-columns: repeat(auto-fit, minmax(282px, max-content));
+  grid-template-columns: repeat(auto-fit, minmax(282px, 1fr));
 }
