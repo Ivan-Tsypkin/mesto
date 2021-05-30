@@ -1,8 +1,8 @@
 const editPopupButton = document.querySelector('.profile__edit-button'); //Выбираем кнопку Редактировать профиль
 const addCardPopupButton = document.querySelector('.profile__add-button'); //Выбираем кнопку Добавить карточку
 const popups = document.querySelectorAll('.popup'); // Выбираем все попапы
-const profilePopupSaveButton = Array.from(popups).find(function (popup) {return popup.classList.contains('popup_type_edit')}).querySelector('.popup__submit-button'); //Выбираем кнопку попапа сохранить профиль
-const saveCardButton = Array.from(popups).find(function (popup) {return popup.classList.contains('popup_type_new-card')}).querySelector('.popup__submit-button'); //Находим кнопку сохранить карточку
+const profilePopupForm = Array.from(popups).find(function (popup) {return popup.classList.contains('popup_type_edit')}).querySelector('.popup__form'); //Находим форму редактирования профиля
+const saveCardForm = Array.from(popups).find(function (popup) {return popup.classList.contains('popup_type_new-card')}).querySelector('.popup__form'); //Находим форму добавления карточки
 let nameInput = Array.from(popups).find(function (popup) {return popup.classList.contains('popup_type_edit')}).querySelector('.popup__form-item_value_name'); //находим поле формы Имя
 let jobInput = Array.from(popups).find(function (popup) {return popup.classList.contains('popup_type_edit')}).querySelector('.popup__form-item_value_job'); //Находим поле формы Работа
 let profileName = document.querySelector('.profile__name'); //Выбираем имя профиля
@@ -72,7 +72,7 @@ function openAddCardPopup () { //Функция открытия попапа д
 
 function formSubmitAddCard (evt) {  //Функция сохранения карточки
   evt.preventDefault();
-  let card = {
+  const card = {
       name: picNameInput.value,
       link: linkInput.value,
       alt: '' //В будушем можно внести в форму добавления карточки поле "Опишите фото" и использовать значение для альта. В задании такого нет - не стал делать.
@@ -102,9 +102,9 @@ function closePopup () { //Закрываем попап
 
 editPopupButton.addEventListener('click', openEditPopup); //Вешаем слушатель на кнопку Редактировать профиль
 closePopupButtons.forEach((button) => {button.addEventListener('click', closePopup)}); //Вешаем слушатель на кнопки закрытия попапа
-profilePopupSaveButton.addEventListener('submit', formSubmitProfileEdit); //на кнопку сохранить профиль вешаем слушатель
+profilePopupForm.addEventListener('submit', formSubmitProfileEdit); //на кнопку сохранить профиль вешаем слушатель
 addCardPopupButton.addEventListener('click', openAddCardPopup); //Вешаем слушатель на кнопку добавления карточек
-saveCardButton.addEventListener('submit', formSubmitAddCard); //Вешаем слушатель на кнопку сохранить карточку
+saveCardForm.addEventListener('submit', formSubmitAddCard); //Вешаем слушатель на кнопку сохранить карточку
 
 
 renderCards(); //Рендер карточек
