@@ -102,9 +102,9 @@ function closePopup () { //Закрываем попап
 
 editPopupButton.addEventListener('click', openEditPopup); //Вешаем слушатель на кнопку Редактировать профиль
 closePopupButtons.forEach((button) => {button.addEventListener('click', closePopup)}); //Вешаем слушатель на кнопки закрытия попапа
-profilePopupSaveButton.addEventListener('click', formSubmitProfileEdit); //на кнопку сохранить профиль вешаем слушатель
+profilePopupSaveButton.addEventListener('submit', formSubmitProfileEdit); //на кнопку сохранить профиль вешаем слушатель
 addCardPopupButton.addEventListener('click', openAddCardPopup); //Вешаем слушатель на кнопку добавления карточек
-saveCardButton.addEventListener('click', formSubmitAddCard); //Вешаем слушатель на кнопку сохранить карточку
+saveCardButton.addEventListener('submit', formSubmitAddCard); //Вешаем слушатель на кнопку сохранить карточку
 
 
 renderCards(); //Рендер карточек
