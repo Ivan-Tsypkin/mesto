@@ -1,18 +1,25 @@
 const editPopupButton = document.querySelector('.profile__edit-button'); //Выбираем кнопку Редактировать профиль
 const addCardPopupButton = document.querySelector('.profile__add-button'); //Выбираем кнопку Добавить карточку
 const popups = document.querySelectorAll('.popup'); // Выбираем все попапы
+const editProfilePopup = document.querySelector('.popup_type_edit'); //Выбираем попап редактирования профиля
+const closeProfilePopupButton = editProfilePopup.querySelector('.popup__close-button'); //Выбираем кнопку закрытия попапа профиля
+const addCardPopup = document.querySelector('.popup_type_new-card'); //Выбираем попап добавления карточки
+const closeAddCardPopupButton = addCardPopup.querySelector('.popup__close-button'); //Выбираем кнопку закрытия попапа добавления карточки
+const popupShowImage = document.querySelector('.popup_type_image'); //Выбираем попап с картинкой
+const closePopupShowImageButton = popupShowImage.querySelector('.popup__close-button'); //Выбираем кнопку закрытия попапа фото карточки
+const popupCardPicture = popupShowImage.querySelector('.popup__image'); //Выбираем фото попапа с фото карточки
+const popupCardTitle = popupShowImage.querySelector('.popup__caption'); //Выбираем подпись попапа с фото карточки
 const profilePopupForm = Array.from(popups).find(function (popup) {return popup.classList.contains('popup_type_edit')}).querySelector('.popup__form'); //Находим форму редактирования профиля
 const saveCardForm = Array.from(popups).find(function (popup) {return popup.classList.contains('popup_type_new-card')}).querySelector('.popup__form'); //Находим форму добавления карточки
-let nameInput = Array.from(popups).find(function (popup) {return popup.classList.contains('popup_type_edit')}).querySelector('.popup__form-item_value_name'); //находим поле формы Имя
-let jobInput = Array.from(popups).find(function (popup) {return popup.classList.contains('popup_type_edit')}).querySelector('.popup__form-item_value_job'); //Находим поле формы Работа
-let profileName = document.querySelector('.profile__name'); //Выбираем имя профиля
-let profileJob = document.querySelector('.profile__job'); //Выбираем название работы профиля
+const nameInput = Array.from(popups).find(function (popup) {return popup.classList.contains('popup_type_edit')}).querySelector('.popup__form-item_value_name'); //находим поле формы Имя
+const jobInput = Array.from(popups).find(function (popup) {return popup.classList.contains('popup_type_edit')}).querySelector('.popup__form-item_value_job'); //Находим поле формы Работа
+const profileName = document.querySelector('.profile__name'); //Выбираем имя профиля
+const profileJob = document.querySelector('.profile__job'); //Выбираем название работы профиля
 const closePopupButtons = document.querySelectorAll('.popup__close-button'); // Выбираем все кнопки закрытия попапа
 const itemTemplate = document.querySelector('.cards__tamplate').content; //Выбираем шаблон карточки
-let picNameInput = document.querySelector('.popup__form-item_value_pic-name'); //Находим инпут названия картинки
-let linkInput = document.querySelector('.popup__form-item_value_link'); //Находим инпут ссылки на картинку
+const picNameInput = document.querySelector('.popup__form-item_value_pic-name'); //Находим инпут названия картинки
+const linkInput = document.querySelector('.popup__form-item_value_link'); //Находим инпут ссылки на картинку
 const cardsList = document.querySelector('.cards__list'); //Находим лист с картинками
-
 
 const cards = [  //Массив стандартных карточек
   { name: 'Эльбрус',
@@ -35,50 +42,57 @@ const cards = [  //Массив стандартных карточек
     alt: 'Владивосток, день, люди смотрят на Золотой мост'},
 ]
 
-
-function renderCards() {  //Функция рендера карточек
-  cards.forEach(renderCard);
-}
-
-function renderCard(card) {  //Функция рендера отдельной карточки
+function createNewCard(card) {  //Функция рендера отдельной карточки
   const htmlElement = itemTemplate.cloneNode(true); //Клонируем шаблон
   htmlElement.querySelector('.cards__image-caption').innerText = card.name; //Присваиваем имя карточки
-  htmlElement.querySelector('.cards__image').setAttribute('src', card.link); //Присваиваем ссылку на карточку
-  htmlElement.querySelector('.cards__image').setAttribute('alt', card.alt); //Присваиваем описание карточки
+  const cardImage = htmlElement.querySelector('.cards__image'); //Записываем элемент фото карточки
+  cardImage.setAttribute('src', card.link); //Присваиваем ссылку на карточку
+  cardImage.setAttribute('alt', card.alt); //Присваиваем описание карточки
   htmlElement.querySelector('.cards__remove-button').addEventListener('click', deleteCard); //Выбираем кнопку удалить карточку и сразу вешаем слушатель
   htmlElement.querySelector('.cards__like-button').addEventListener('click', likeCard); //Выбираем кнопку лайк и сразу вешаем слушатель
-  htmlElement.querySelector('.cards__image').addEventListener('click', openImagePopup); //Выбираем картинку и сразу вешаем слушатель
-  cardsList.prepend(htmlElement); //Добавляем карточку
+  cardImage.addEventListener('click', () => openImagePopup(card.name, card.link)); //Выбираем картинку и сразу вешаем слушатель
+  return htmlElement;
+};
+
+function renderCard(elem) { //Функция добавления карточки на страницу
+  cardsList.prepend(elem);
+}
+
+function openPopup(popup) { //Функция открытия попапа
+  popup.classList.add('popup_opened');
+}
+
+function closePopup(popup) { //Функция закрытия попапа
+  popup.classList.remove('popup_opened');
 }
 
 function openEditPopup () { //Функция открытия попапа редактирования профиля
-  if (!Array.from(popups).find(function (popup) {return popup.classList.contains('popup_opened')})) {  //Заполняем поля формы редактирования профиля имеющимися значениями
-    nameInput.value = profileName.textContent;
-    jobInput.value = profileJob.textContent;
-  }
-  Array.from(popups).find(function (popup) {return popup.classList.contains('popup_type_edit')}).classList.add('popup_opened'); //Открываем попап редактирования профиля
+  openPopup(editProfilePopup);
+  nameInput.value = profileName.textContent;
+  jobInput.value = profileJob.textContent;
 }
 
-function formSubmitProfileEdit (evt) { //Функция сохранения профиля
+function submitProfileForm (evt) { //Функция сохранения профиля
   evt.preventDefault();
   profileName.textContent = nameInput.value;
   profileJob.textContent = jobInput.value;
-  closePopup();
+  closePopup(editProfilePopup);
 }
 
 function openAddCardPopup () { //Функция открытия попапа добавления карточек
-  Array.from(popups).find(function (popup) {return popup.classList.contains('popup_type_new-card')}).classList.add('popup_opened'); //Открываем попап добавления карточек
+  openPopup(addCardPopup); //Открываем попап добавления карточек
 }
 
-function formSubmitAddCard (evt) {  //Функция сохранения карточки
+function submitAddCardForm (evt) {  //Функция сохранения карточки
   evt.preventDefault();
   const card = {
       name: picNameInput.value,
       link: linkInput.value,
       alt: '' //В будушем можно внести в форму добавления карточки поле "Опишите фото" и использовать значение для альта. В задании такого нет - не стал делать.
     }
-  closePopup();
-  renderCard(card);
+  const newCard = createNewCard(card);
+  renderCard(newCard);
+  closePopup(addCardPopup);
 }
 
 function deleteCard(evt) {  //Функция удаления карточки
@@ -89,22 +103,24 @@ function likeCard(event) {  //Функция лайка карточки
   event.target.classList.toggle('cards__like-button_active');
 }
 
-function openImagePopup(evt) { //Открываем попап с картинкой
-  document.querySelector('.popup__image').setAttribute('src', evt.target.getAttribute('src'));
-  document.querySelector('.popup__caption').textContent = evt.target.nextElementSibling.firstElementChild.textContent;
-  Array.from(popups).find(function (popup) {return popup.classList.contains('popup_type_image')}).classList.add('popup_opened'); //Находим попап с картинкой
-}
-
-function closePopup () { //Закрываем попап
-  Array.from(popups).find(function (popup) {return popup.classList.contains('popup_opened')}).classList.remove('popup_opened'); //Убираем модификатор
+function openImagePopup(name, link) { //Открываем попап с картинкой
+  openPopup(popupShowImage);
+  popupCardPicture.src = link;
+  popupCardPicture.alt = name;
+  popupCardTitle.textContent = name;
 }
 
 
 editPopupButton.addEventListener('click', openEditPopup); //Вешаем слушатель на кнопку Редактировать профиль
-closePopupButtons.forEach((button) => {button.addEventListener('click', closePopup)}); //Вешаем слушатель на кнопки закрытия попапа
-profilePopupForm.addEventListener('submit', formSubmitProfileEdit); //на кнопку сохранить профиль вешаем слушатель
+closeProfilePopupButton.addEventListener('click', () => closePopup(editProfilePopup)); //Вешаем слушатель на кнопкe закрытия попапа профиля
+closeAddCardPopupButton.addEventListener('click', () => closePopup(addCardPopup)); //Вешаем слушатель на кнопкe закрытия попапа добавления карточки
+closePopupShowImageButton.addEventListener('click', () => closePopup(popupShowImage)); //Вешаем слушатель на кнопкe закрытия попапа фото карточки
+profilePopupForm.addEventListener('submit', submitProfileForm); //на кнопку сохранить профиль вешаем слушатель
 addCardPopupButton.addEventListener('click', openAddCardPopup); //Вешаем слушатель на кнопку добавления карточек
-saveCardForm.addEventListener('submit', formSubmitAddCard); //Вешаем слушатель на кнопку сохранить карточку
+saveCardForm.addEventListener('submit', submitAddCardForm); //Вешаем слушатель на кнопку сохранить карточку
 
 
-renderCards(); //Рендер карточек
+cards.forEach((card) => { //Рендер стандартных карточек карточек
+  const newCard = createNewCard(card);
+  renderCard(newCard);
+});
