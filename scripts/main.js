@@ -60,7 +60,7 @@ function renderCard(elem) { //Функция добавления карточк
 
 function openPopup(popup) { //Функция открытия попапа
   popup.classList.add('popup_opened');
-  popup.addEventListener('click', closePopupOnOverlay);
+  popup.addEventListener('mousedown', closePopupOnOverlay); //Выбрал ивент mousedown т.к. при click, если сначала нажать клавишу мыши в области контейнера попапа, а потом перенести курсор на оверлей и отпустить клавишу, то попап закроется. Так не удобно редактировать поля формы (когда выделяешь текст и случайно вышел за пределы контейнера)
   document.addEventListener('keydown', closePopupOnEscape);
 }
 
@@ -86,7 +86,8 @@ function openEditPopup () { //Функция открытия попапа ре�
   openPopup(editProfilePopup);
   nameInput.value = profileName.textContent;
   jobInput.value = profileJob.textContent;
-
+  editProfilePopup.querySelector('.popup__submit-button').classList.remove('popup__submit-button_disabled'); //При открытии попапа редактирования убираю класс деактивации сабмит-кнопки, потому что при загрузке страницы в полях формы профиля текста нет, его туда помещает функция открытия попапа уже после открытия, т.к. это делает не пользователь, то ивент на повторную проверку полей на валидность не срабатывает и кнопка будет неактивной, пока пользователь не добавит/уберёт хотя бы один символ.
+  editProfilePopup.querySelector('.popup__submit-button').removeAttribute('disabled', true); //Так же убираю атрибут disable
 }
 
 function submitProfileForm (evt) { //Функция сохранения профиля
@@ -98,6 +99,8 @@ function submitProfileForm (evt) { //Функция сохранения про�
 
 function openAddCardPopup () { //Функция открытия попапа добавления карточек
   openPopup(addCardPopup); //Открываем попап добавления карточек
+  addCardPopup.querySelector('.pic-name-error').textContent = 'Заполните это поле.'; //Добавляю подписи ошибки к полям формы добавления карточки при первом открытии попапа
+  addCardPopup.querySelector('.pic-link-error').textContent = 'Заполните это поле.';
 }
 
 function submitAddCardForm (evt) {  //Функция сохранения карточки
@@ -110,6 +113,9 @@ function submitAddCardForm (evt) {  //Функция сохранения кар
   const newCard = createNewCard(card);
   renderCard(newCard);
   closePopup(addCardPopup);
+  addCardPopup.querySelector('.popup__form').reset(); //Сбрасываю форму после сохранения карточки
+  addCardPopup.querySelector('.popup__submit-button').classList.add('popup__submit-button_disabled'); //Так же обработчик toggleButtonState после сброса не меняет состояние кнопки, поэтому меняем прямо в функции закрытия
+  addCardPopup.querySelector('.popup__submit-button').setAttribute('disabled', true); //Добавляем атрибут по той же причине
 }
 
 function deleteCard(evt) {  //Функция удаления карточки
@@ -126,7 +132,6 @@ function openImagePopup(name, link) { //Открываем попап с кар�
   popupCardPicture.alt = name;
   popupCardTitle.textContent = name;
 }
-
 
 editPopupButton.addEventListener('click', openEditPopup); //Вешаем слушатель на кнопку Редактировать профиль
 closeProfilePopupButton.addEventListener('click', () => closePopup(editProfilePopup)); //Вешаем слушатель на кнопкe закрытия попапа профиля
