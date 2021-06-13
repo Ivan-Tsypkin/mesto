@@ -60,16 +60,33 @@ function renderCard(elem) { //Функция добавления карточк
 
 function openPopup(popup) { //Функция открытия попапа
   popup.classList.add('popup_opened');
+  popup.addEventListener('click', closePopupOnOverlay);
+  document.addEventListener('keydown', closePopupOnEscape);
+}
+
+function closePopupOnOverlay(event) {  //Функция закрытия попапа по клику на оверлей
+  if (event.target === event.currentTarget) {
+    closePopup(event.currentTarget);
+  }
+}
+
+function closePopupOnEscape (event) { //Функция закрытия попапа по клавише Escape
+  if (event.key === 'Escape') {
+    closePopup(Array.from(popups).find(item => item.classList.contains('popup_opened')));
+  }
 }
 
 function closePopup(popup) { //Функция закрытия попапа
   popup.classList.remove('popup_opened');
+  popup.removeEventListener('click', closePopupOnOverlay);
+  document.removeEventListener('keydown', closePopupOnEscape);
 }
 
 function openEditPopup () { //Функция открытия попапа редактирования профиля
   openPopup(editProfilePopup);
   nameInput.value = profileName.textContent;
   jobInput.value = profileJob.textContent;
+
 }
 
 function submitProfileForm (evt) { //Функция сохранения профиля
