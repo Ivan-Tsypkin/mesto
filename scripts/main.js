@@ -21,35 +21,14 @@ const picNameInput = document.querySelector('.popup__form-item_value_pic-name');
 const linkInput = document.querySelector('.popup__form-item_value_link'); //Находим инпут ссылки на картинку
 const cardsList = document.querySelector('.cards__list'); //Находим лист с картинками
 
-const cards = [  //Массив стандартных карточек
-  { name: 'Эльбрус',
-    link: './images/Elbrus.png',
-    alt: 'Гора Эльбрус, Солнце скрылось за вершину'},
-  { name: 'Коми',
-    link: './images/Komi.png',
-    alt: 'Коми, река, лес, Зима'},
-  { name: 'Москва',
-    link: './images/Moscow.png',
-    alt: 'Москва, центр города, день, небоскрёбы'},
-  { name: 'Санкт-Петербург',
-    link: './images/Saint-Petersburg.png',
-    alt: 'Санкт-Петербург, вечер, разведённый мост'},
-  { name: 'Сочи',
-    link: './images/Sochi.png',
-    alt: 'Сочи, побережье, огни ночного города с высоты птичьего полёта'},
-  { name: 'Владивосток',
-    link: './images/Vladivostok.png',
-    alt: 'Владивосток, день, люди смотрят на Золотой мост'},
-]
-
 function createNewCard(card) {  //Функция рендера отдельной карточки
   const htmlElement = itemTemplate.cloneNode(true); //Клонируем шаблон
   htmlElement.querySelector('.cards__image-caption').innerText = card.name; //Присваиваем имя карточки
   const cardImage = htmlElement.querySelector('.cards__image'); //Записываем элемент фото карточки
-  cardImage.setAttribute('src', card.link); //Присваиваем ссылку на карточку
-  cardImage.setAttribute('alt', card.alt); //Присваиваем описание карточки
+  cardImage.src = card.link; //Присваиваем ссылку на карточку
+  cardImage.alt = card.alt; //Присваиваем описание карточки
   htmlElement.querySelector('.cards__remove-button').addEventListener('click', deleteCard); //Выбираем кнопку удалить карточку и сразу вешаем слушатель
-  htmlElement.querySelector('.cards__like-button').addEventListener('click', likeCard); //Выбираем кнопку лайк и сразу вешаем слушатель
+  htmlElement.querySelector('.cards__like-button').addEventListener('click', handleLikeCard); //Выбираем кнопку лайк и сразу вешаем слушатель
   cardImage.addEventListener('click', () => openImagePopup(card.name, card.link)); //Выбираем картинку и сразу вешаем слушатель
   return htmlElement;
 };
@@ -72,7 +51,7 @@ function closePopupOnOverlay(event) {  //Функция закрытия поп�
 
 function closePopupOnEscape (event) { //Функция закрытия попапа по клавише Escape
   if (event.key === 'Escape') {
-    closePopup(Array.from(popups).find(item => item.classList.contains('popup_opened')));
+    closePopup(document.querySelector('.popup_opened'));
   }
 }
 
@@ -86,9 +65,7 @@ function openEditPopup () { //Функция открытия попапа ре�
   openPopup(editProfilePopup);
   nameInput.value = profileName.textContent;
   jobInput.value = profileJob.textContent;
-  editProfilePopup.querySelector('.popup__submit-button').classList.remove('popup__submit-button_disabled'); //При открытии попапа редактирования убираю класс деактивации сабмит-кнопки, потому что при загрузке страницы в полях формы профиля текста нет, его туда помещает функция открытия попапа уже после открытия, т.к. это делает не пользователь, то ивент на повторную проверку полей на валидность не срабатывает и кнопка будет неактивной, пока пользователь не добавит/уберёт хотя бы один символ.
-  editProfilePopup.querySelector('.popup__submit-button').removeAttribute('disabled', true); //Так же убираю атрибут disable
-}
+} //Решил просто убрать активацию кнопки при первом открытии попапа, ведь действительно, если данные не редактировались, то и пересохранять не имеет смысла
 
 function submitProfileForm (evt) { //Функция сохранения профиля
   evt.preventDefault();
@@ -99,16 +76,14 @@ function submitProfileForm (evt) { //Функция сохранения про�
 
 function openAddCardPopup () { //Функция открытия попапа добавления карточек
   openPopup(addCardPopup); //Открываем попап добавления карточек
-  addCardPopup.querySelector('.pic-name-error').textContent = 'Заполните это поле.'; //Добавляю подписи ошибки к полям формы добавления карточки при первом открытии попапа
-  addCardPopup.querySelector('.pic-link-error').textContent = 'Заполните это поле.';
-}
+} //Так же решил убрать добавление сообщений о заполнении полей, чтобы не нагромождать код ну и если уж не обязательно :)
 
 function submitAddCardForm (evt) {  //Функция сохранения карточки
   evt.preventDefault();
   const card = {
       name: picNameInput.value,
       link: linkInput.value,
-      alt: '' //В будушем можно внести в форму добавления карточки поле "Опишите фото" и использовать значение для альта. В задании такого нет - не стал делать.
+      alt: picNameInput.value //Alt для новых карточек берём из названия фото
     }
   const newCard = createNewCard(card);
   renderCard(newCard);
@@ -122,7 +97,7 @@ function deleteCard(evt) {  //Функция удаления карточки
   evt.target.closest('.cards__item').remove();
 }
 
-function likeCard(event) {  //Функция лайка карточки
+function handleLikeCard(event) {  //Функция лайка карточки
   event.target.classList.toggle('cards__like-button_active');
 }
 
@@ -137,9 +112,9 @@ editPopupButton.addEventListener('click', openEditPopup); //Вешаем слу�
 closeProfilePopupButton.addEventListener('click', () => closePopup(editProfilePopup)); //Вешаем слушатель на кнопкe закрытия попапа профиля
 closeAddCardPopupButton.addEventListener('click', () => closePopup(addCardPopup)); //Вешаем слушатель на кнопкe закрытия попапа добавления карточки
 closePopupShowImageButton.addEventListener('click', () => closePopup(popupShowImage)); //Вешаем слушатель на кнопкe закрытия попапа фото карточки
-profilePopupForm.addEventListener('submit', submitProfileForm); //на кнопку сохранить профиль вешаем слушатель
+profilePopupForm.addEventListener('submit', submitProfileForm); //Вешаем слушатель submit на форму редактирования профиля
 addCardPopupButton.addEventListener('click', openAddCardPopup); //Вешаем слушатель на кнопку добавления карточек
-saveCardForm.addEventListener('submit', submitAddCardForm); //Вешаем слушатель на кнопку сохранить карточку
+saveCardForm.addEventListener('submit', submitAddCardForm); //Вешаем слушатель submit на форму добавления карточки
 
 
 cards.forEach((card) => { //Рендер стандартных карточек карточек
