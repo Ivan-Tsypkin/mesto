@@ -21,11 +21,13 @@ function isValid(formElement, inputElement) { //Функция проверки 
 
 function showInputError(formElement, inputElement, errorMessage) { //Функция отображения текста ошибки
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+  inputElement.classList.add('popup__form-item_state_invalid');
   errorElement.textContent = errorMessage;
 };
 
 function hideInputError(formElement, inputElement) { //Функция скрытия текста ошибки
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+  inputElement.classList.remove('popup__form-item_state_invalid');
   errorElement.textContent = '';
 };
 

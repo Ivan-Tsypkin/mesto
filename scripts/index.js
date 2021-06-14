@@ -88,9 +88,10 @@ function submitAddCardForm (evt) {  //Функция сохранения кар
   const newCard = createNewCard(card);
   renderCard(newCard);
   closePopup(addCardPopup);
-  addCardPopup.querySelector('.popup__form').reset(); //Сбрасываю форму после сохранения карточки
-  addCardPopup.querySelector('.popup__submit-button').classList.add('popup__submit-button_disabled'); //Так же обработчик toggleButtonState после сброса не меняет состояние кнопки, поэтому меняем прямо в функции закрытия
-  addCardPopup.querySelector('.popup__submit-button').setAttribute('disabled', true); //Добавляем атрибут по той же причине
+  const inputList = Array.from(addCardPopup.querySelectorAll('.popup__form-item'));
+  const buttonElement = addCardPopup.querySelector('.popup__submit-button');
+  saveCardForm.reset(); //Сбрасываю форму после сохранения карточки
+  toggleButtonState(inputList, buttonElement, 'popup__submit-button_disabled'); //Вызываем функцию переключения сабмит-кнопки
 }
 
 function deleteCard(evt) {  //Функция удаления карточки
