@@ -21,21 +21,58 @@ const picNameInput = document.querySelector('.popup__form-item_value_pic-name');
 const linkInput = document.querySelector('.popup__form-item_value_link'); //Находим инпут ссылки на картинку
 const cardsList = document.querySelector('.cards__list'); //Находим лист с картинками
 
-function createNewCard(card) {  //Функция рендера отдельной карточки
-  const htmlElement = itemTemplate.cloneNode(true); //Клонируем шаблон
-  htmlElement.querySelector('.cards__image-caption').innerText = card.name; //Присваиваем имя карточки
-  const cardImage = htmlElement.querySelector('.cards__image'); //Записываем элемент фото карточки
-  cardImage.src = card.link; //Присваиваем ссылку на карточку
-  cardImage.alt = card.alt; //Присваиваем описание карточки
-  htmlElement.querySelector('.cards__remove-button').addEventListener('click', deleteCard); //Выбираем кнопку удалить карточку и сразу вешаем слушатель
-  htmlElement.querySelector('.cards__like-button').addEventListener('click', handleLikeCard); //Выбираем кнопку лайк и сразу вешаем слушатель
-  cardImage.addEventListener('click', () => openImagePopup(card.name, card.link)); //Выбираем картинку и сразу вешаем слушатель
-  return htmlElement;
-};
 
-function renderCard(elem) { //Функция добавления карточки на страницу
-  cardsList.prepend(elem);
+class Card { //Инициализация класса карточки
+  constructor(data, cardTemplateSelector) {
+    this._cardName = data.name;
+    this._cardImageLink = data.link;
+    this._cardImageAlt = data.alt;
+    this._cardTemplateSelector = cardTemplateSelector
+  }
+
+  _getTemplate() { //функция получения образца разметки карточки
+    const cardElement = document.querySelector(this._cardTemplateSelector).content.querySelector('.cards__item').cloneNode(true)
+    return cardElement;
+  }
+
+  generateCard() { //Функция наполнения карточки контентом
+    this._cardElement = this._getTemplate();
+    this._setEventListeners();
+    this._cardElement.querySelector('.cards__image-caption').innerText = this._cardName;
+    const cardImage = this._cardElement.querySelector('.cards__image');
+    cardImage.src = this._cardImageLink;
+    cardImage.alt = this._cardImageAlt;
+    return this._cardElement;
+  }
+
+  _setEventListeners() { //Функция установки слушателей
+    this._cardElement.querySelector('.cards__remove-button').addEventListener('click', () => this._deleteCard());
+    this._cardElement.querySelector('.cards__like-button').addEventListener('click', () => this._handleLikeCard());
+    this._cardElement.querySelector('.cards__image').addEventListener('click', () => this._openImagePopup());
+  }
+
+  _handleLikeCard() { //Функция лайка
+    this._cardElement.querySelector('.cards__like-button').classList.toggle('cards__like-button_active');
+  }
+
+  _deleteCard() {  //Функция удаления карточки
+    this._cardElement.remove();
+  }
+
+  _openImagePopup() { //Открываем попап с картинкой
+    popupCardPicture.src = this._cardImageLink;
+    popupCardPicture.alt = this._cardName;
+    popupCardTitle.textContent = this._cardName;
+    openPopup(popupShowImage);
+  }
+
 }
+
+cards.forEach((item) => { //Рендер стандартных карточек карточек
+  const card = new Card(item, '.cards__tamplate');
+  const newCard = card.generateCard();
+  cardsList.prepend(newCard);
+});
 
 function openPopup(popup) { //Функция открытия попапа
   popup.classList.add('popup_opened');
@@ -80,33 +117,19 @@ function openAddCardPopup () { //Функция открытия попапа д
 
 function submitAddCardForm (evt) {  //Функция сохранения карточки
   evt.preventDefault();
-  const card = {
+  const item = {
       name: picNameInput.value,
       link: linkInput.value,
       alt: picNameInput.value //Alt для новых карточек берём из названия фото
     }
-  const newCard = createNewCard(card);
-  renderCard(newCard);
+  const card = new Card(item, '.cards__tamplate');
+  const newCard = card.generateCard();
+  cardsList.prepend(newCard);
   closePopup(addCardPopup);
   const inputList = Array.from(addCardPopup.querySelectorAll('.popup__form-item'));
   const buttonElement = addCardPopup.querySelector('.popup__submit-button');
   saveCardForm.reset(); //Сбрасываю форму после сохранения карточки
   toggleButtonState(inputList, buttonElement, 'popup__submit-button_disabled'); //Вызываем функцию переключения сабмит-кнопки
-}
-
-function deleteCard(evt) {  //Функция удаления карточки
-  evt.target.closest('.cards__item').remove();
-}
-
-function handleLikeCard(event) {  //Функция лайка карточки
-  event.target.classList.toggle('cards__like-button_active');
-}
-
-function openImagePopup(name, link) { //Открываем попап с картинкой
-  openPopup(popupShowImage);
-  popupCardPicture.src = link;
-  popupCardPicture.alt = name;
-  popupCardTitle.textContent = name;
 }
 
 editPopupButton.addEventListener('click', openEditPopup); //Вешаем слушатель на кнопку Редактировать профиль
@@ -116,9 +139,3 @@ closePopupShowImageButton.addEventListener('click', () => closePopup(popupShowIm
 profilePopupForm.addEventListener('submit', submitProfileForm); //Вешаем слушатель submit на форму редактирования профиля
 addCardPopupButton.addEventListener('click', openAddCardPopup); //Вешаем слушатель на кнопку добавления карточек
 saveCardForm.addEventListener('submit', submitAddCardForm); //Вешаем слушатель submit на форму добавления карточки
-
-
-cards.forEach((card) => { //Рендер стандартных карточек карточек
-  const newCard = createNewCard(card);
-  renderCard(newCard);
-});
