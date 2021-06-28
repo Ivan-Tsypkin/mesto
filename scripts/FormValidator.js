@@ -55,6 +55,13 @@ class FormValidator {
     this._setEventListeners();
   }
 
+  repeatValidation() { //Публичная функция повторной проверки валидации полей после закрытия/открытия попапа профиля и после сабмита добавления карточки
+    this._inputList.forEach((inputElement) => {
+      this._isValid(inputElement);
+      this._toggleButtonState();
+    });
+  }
+
 }
 
 export default FormValidator;

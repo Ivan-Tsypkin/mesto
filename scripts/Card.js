@@ -1,4 +1,6 @@
 import openPopup from "./index.js"; //Без этого импорта не работает метод класса _openImagePopup()
+import {popupShowImage, popupCardPicture, popupCardTitle} from "./constants.js"
+
 
 class Card { //Инициализация класса карточки
   constructor(data, cardTemplateSelector) {

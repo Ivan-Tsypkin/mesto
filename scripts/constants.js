@@ -41,3 +41,13 @@ const cards = [  //Массив стандартных карточек
     link: './images/Vladivostok.png',
     alt: 'Владивосток, день, люди смотрят на Золотой мост'},
 ]
+
+const config = {
+  inputSelector: '.popup__form-item',
+  submitButtonSelector: '.popup__submit-button',
+  inactiveButtonClass: 'popup__submit-button_disabled',
+  invalidInputClass: 'popup__form-item_state_invalid'
+}
+
+export {editPopupButton, addCardPopupButton, popups, editProfilePopup, closeProfilePopupButton, addCardPopup, closeAddCardPopupButton, popupShowImage, closePopupShowImageButton,
+  popupCardPicture, popupCardTitle, profilePopupForm, saveCardForm, nameInput, jobInput, profileName, profileJob, closePopupButtons, itemTemplate, picNameInput, linkInput, cardsList, cards, config}
