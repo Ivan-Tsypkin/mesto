@@ -1,13 +1,10 @@
-import openPopup from "./index.js"; //Без этого импорта не работает метод класса _openImagePopup()
-import {popupShowImage, popupCardPicture, popupCardTitle} from "./constants.js"
-
-
 class Card { //Инициализация класса карточки
-  constructor(data, cardTemplateSelector) {
+  constructor(data, cardTemplateSelector, handleCardClick) {
     this._cardName = data.name;
     this._cardImageLink = data.link;
     this._cardImageAlt = data.alt;
-    this._cardTemplateSelector = cardTemplateSelector
+    this._cardTemplateSelector = cardTemplateSelector;
+    this._handleCardClick = handleCardClick;
   }
 
   _getTemplate() { //функция получения образца разметки карточки
@@ -28,7 +25,7 @@ class Card { //Инициализация класса карточки
   _setEventListeners() { //Функция установки слушателей
     this._cardElement.querySelector('.cards__remove-button').addEventListener('click', () => this._deleteCard());
     this._cardElement.querySelector('.cards__like-button').addEventListener('click', () => this._handleLikeCard());
-    this._cardElement.querySelector('.cards__image').addEventListener('click', () => this._openImagePopup());
+    this._cardElement.querySelector('.cards__image').addEventListener('click', this._handleCardClick);
   }
 
   _handleLikeCard() { //Функция лайка
@@ -37,13 +34,6 @@ class Card { //Инициализация класса карточки
 
   _deleteCard() {  //Функция удаления карточки
     this._cardElement.remove();
-  }
-
-  _openImagePopup() { //Открываем попап с картинкой
-    popupCardPicture.src = this._cardImageLink;
-    popupCardPicture.alt = this._cardName;
-    popupCardTitle.textContent = this._cardName;
-    openPopup(popupShowImage);
   }
 
 }

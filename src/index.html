@@ -8,7 +8,7 @@
   <meta name="keywords" content="Места России">
   <meta name="author" content="Иван Цыпкин">
   <title>Место</title>
-  <link rel="stylesheet" href="./pages/index.css">
+
 </head>
 <body class="page">
   <div class="page__content">
@@ -19,7 +19,7 @@
 
     <main class="main">
       <section class="profile">
-        <img src="./images/Cousteau.png" alt="Аватар" class="profile__avatar">
+        <img src="<%=require('./images/Cousteau.png')%>" alt="Аватар" class="profile__avatar">
         <div class="profile__info">
           <h1 class="profile__name">Жак-Ив Кусто</h1>
           <button type="button" class="profile__edit-button" aria-label="Редактировать профиль"></button>
@@ -37,7 +37,7 @@
       <template class="cards__tamplate">
         <li class="cards__item">
           <button type="button" class="cards__remove-button" aria-label="Удалить карточку"></button>
-          <img src="./images/Elbrus.png" alt="Гора Эльбрус, Солнце скрылось за вершину" class="cards__image">
+          <img src="#" alt="Гора Эльбрус, Солнце скрылось за вершину" class="cards__image">
           <div class="cards__caption">
             <h2 class="cards__image-caption">Эльбрус</h2>
             <button type="button" class="cards__like-button" aria-label="Поставить лайк"></button>
@@ -82,14 +82,14 @@
     <div class="popup popup_type_image">
       <figure class="popup__figure">
         <button type="button" class="popup__close-button" aria-label="Закрыть окно"></button>
-        <img src="./images/Elbrus.png" alt="Маршрут" class="popup__image">
+        <img src="#" alt="Маршрут" class="popup__image">
         <figcaption class="popup__caption">Эльбрус</figcaption>
       </figure>
     </div>
 
   </div>
 
-  <script type="module" src='./scripts/index.js'></script>
+
 
 </body>
 </html>
