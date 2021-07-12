@@ -40,9 +40,13 @@ editProfilePop.setEventListeners();
 const userInfo = new UserInfo('.profile__name', '.profile__job'); //Экземпляр инфо пользователя
 
 
-function cardGenerator(cardItem) {  //Функция добавления карточки
+function createCard(cardItem) { //Функция создания карточки
   const card = new Card(cardItem, '.cards__tamplate', () => {imagePopup.open(cardItem.link, cardItem.name)});
-  const newCard = card.generateCard();
+  return card.generateCard()
+}
+
+function cardGenerator(cardItem) {  //Функция добавления карточки
+  const newCard = createCard(cardItem);
   cardSection.setItem(newCard);
 }
 
@@ -59,7 +63,7 @@ function submitAddCardForm (data) {  //Функция сохранения ка�
     }
   cardGenerator(item);
   addCardPop.close();
-  addCardFormValidator.repeatValidation();
+  addCardFormValidator.resetValidation();
 }
 
 
@@ -67,8 +71,10 @@ editPopupButton.addEventListener('click', () => {
   const userInfoData = userInfo.getUserInfo();
   nameInput.value = userInfoData.userName;
   jobInput.value = userInfoData.userJob;
-  profileEditFormValidator.repeatValidation()
+  profileEditFormValidator.resetValidation()
   editProfilePop.open()
 }); //Вешаем слушатель на кнопку Редактировать профиль
 
-addCardPopupButton.addEventListener('click', () => addCardPop.open()); //Вешаем слушатель на кнопку добавления карточек
+addCardPopupButton.addEventListener('click', () => {
+  addCardFormValidator.resetValidation();
+  addCardPop.open()}); //Вешаем слушатель на кнопку добавления карточек

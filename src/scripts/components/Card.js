@@ -17,6 +17,7 @@ class Card { //Инициализация класса карточки
     this._setEventListeners();
     this._cardElement.querySelector('.cards__image-caption').innerText = this._cardName;
     const cardImage = this._cardElement.querySelector('.cards__image');
+    this._likeCard = this._cardElement.querySelector('.cards__like-button');
     cardImage.src = this._cardImageLink;
     cardImage.alt = this._cardImageAlt;
     return this._cardElement;
@@ -29,7 +30,7 @@ class Card { //Инициализация класса карточки
   }
 
   _handleLikeCard() { //Функция лайка
-    this._cardElement.querySelector('.cards__like-button').classList.toggle('cards__like-button_active');
+    this._likeCard.classList.toggle('cards__like-button_active');
   }
 
   _deleteCard() {  //Функция удаления карточки
