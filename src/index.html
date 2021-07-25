@@ -8,6 +8,12 @@
   <meta name="keywords" content="Места России">
   <meta name="author" content="Иван Цыпкин">
   <title>Место</title>
+  <!-- Иногда при отрисовке страницы на мгновение появляются все попапы, а затем пропадают. Решил прописать стиль в начале документа. Протестил - теперь не появляются -->
+  <style>
+    .popup {
+      visibility: hidden;
+    }
+  </style>
 
 </head>
 <body class="page">
@@ -19,11 +25,13 @@
 
     <main class="main">
       <section class="profile">
-        <img src="<%=require('./images/Cousteau.png')%>" alt="Аватар" class="profile__avatar">
+        <div class="profile__avatar-container">
+          <img src="#" alt="Загрузка аватара" class="profile__avatar">
+        </div>
         <div class="profile__info">
-          <h1 class="profile__name">Жак-Ив Кусто</h1>
+          <h1 class="profile__name">Загрузка данных...</h1>
           <button type="button" class="profile__edit-button" aria-label="Редактировать профиль"></button>
-          <p class="profile__job">Исследователь океана</p>
+          <p class="profile__job">Загрузка данных...</p>
         </div>
         <button type="button" class="profile__add-button" aria-label="Добавить профиль"></button>
       </section>
@@ -40,7 +48,10 @@
           <img src="#" alt="Гора Эльбрус, Солнце скрылось за вершину" class="cards__image">
           <div class="cards__caption">
             <h2 class="cards__image-caption">Эльбрус</h2>
-            <button type="button" class="cards__like-button" aria-label="Поставить лайк"></button>
+            <div class="cards__likes">
+              <button type="button" class="cards__like-button" aria-label="Поставить лайк"></button>
+              <span class="cards__likes-number"></span>
+            </div>
           </div>
         </li>
       </template>
@@ -65,6 +76,18 @@
       </div>
     </div>
 
+    <div class="popup popup_type_edit-avatar">
+      <div class="popup__container">
+        <button type="button" class="popup__close-button" aria-label="Закрыть окно"></button>
+        <h3 class="popup__heading">Обновить аватар</h3>
+        <form class="popup__form popup__form_type_edit-profile" method="POST" name="profileAvatarForm" novalidate>
+          <input type="url" class="popup__form-item popup__form-item_value_link" placeholder="Ссылка на аватар" name="avatarLink" id="avatar-link" required>
+          <span class="avatar-link-error popup__form-error-msg"></span>
+          <button type="submit" class="popup__submit-button popup__submit-button_disabled" aria-label="Сохранить профиль">Сохранить</button>
+        </form>
+      </div>
+    </div>
+
     <div class="popup popup_type_new-card">
       <div class="popup__container">
         <button type="button" class="popup__close-button" aria-label="Закрыть окно"></button>
@@ -74,7 +97,7 @@
           <span class="pic-name-error popup__form-error-msg"></span>
           <input type="url" class="popup__form-item popup__form-item_value_link" placeholder="Ссылка на картинку" name="picLink" id="pic-link" required>
           <span class="pic-link-error popup__form-error-msg popup__form-error-msg_pos_bottom"></span>
-          <button type="submit" class="popup__submit-button popup__submit-button_disabled" aria-label="Сохранить профиль" disabled="true">Создать</button>
+          <button type="submit" class="popup__submit-button popup__submit-button_disabled" aria-label="Сохранить карточку" disabled="true">Создать</button>
         </form>
       </div>
     </div>
@@ -85,6 +108,16 @@
         <img src="#" alt="Маршрут" class="popup__image">
         <figcaption class="popup__caption">Эльбрус</figcaption>
       </figure>
+    </div>
+
+    <div class="popup popup_type_delete-card-confirm">
+      <div class="popup__container">
+        <button type="button" class="popup__close-button" aria-label="Закрыть окно"></button>
+        <h3 class="popup__heading">Вы уверены?</h3>
+        <form class="popup__form popup__form_type_delete-card-confirm" method="POST" name="newCardForm" novalidate>
+          <button type="submit" class="popup__submit-button popup__submit-button_type_delete-card-confirm" aria-label="Удалить карточку">Да</button>
+        </form>
+      </div>
     </div>
 
   </div>

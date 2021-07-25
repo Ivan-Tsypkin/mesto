@@ -1,6 +1,7 @@
 export default class Popup {
   constructor(popupSelector) {
     this._popup = document.querySelector(popupSelector);
+    this._popupSubmitButton = this._popup.querySelector('.popup__submit-button');
     this._handleEscClose = this._closePopupOnEscape.bind(this);
   }
 
@@ -31,5 +32,8 @@ export default class Popup {
     this._popup.addEventListener('mousedown', this._closePopupOnOverlay.bind(this));
   }
 
+  setSubmitButtonMassage(massage) {
+    this._popupSubmitButton.textContent = massage;
+  }
 
 }

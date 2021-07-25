@@ -1,36 +1,9 @@
-import elbrus from '../../images/Elbrus.png';
-import komi from '../../images/Komi.png';
-import moscow from '../../images/Moscow.png';
-import peterburg from '../../images/Saint-Petersburg.png';
-import sochi from '../../images/Sochi.png';
-import vladivostok from '../../images/Vladivostok.png';
-
-
 const editPopupButton = document.querySelector('.profile__edit-button'); //Выбираем кнопку Редактировать профиль
 const addCardPopupButton = document.querySelector('.profile__add-button'); //Выбираем кнопку Добавить карточку
+const profileAvatar = document.querySelector('.profile__avatar-container'); //Выбираем аватар
 const nameInput = document.querySelector('.popup__form-item_value_name'); //находим поле формы Имя
 const jobInput = document.querySelector('.popup__form-item_value_job'); //Находим поле формы Работа
 
-const cards = [  //Массив стандартных карточек
-  { name: 'Эльбрус',
-    link: elbrus,
-    alt: 'Гора Эльбрус, Солнце скрылось за вершину'},
-  { name: 'Коми',
-    link: komi,
-    alt: 'Коми, река, лес, Зима'},
-  { name: 'Москва',
-    link: moscow,
-    alt: 'Москва, центр города, день, небоскрёбы'},
-  { name: 'Санкт-Петербург',
-    link: peterburg,
-    alt: 'Санкт-Петербург, вечер, разведённый мост'},
-  { name: 'Сочи',
-    link: sochi,
-    alt: 'Сочи, побережье, огни ночного города с высоты птичьего полёта'},
-  { name: 'Владивосток',
-    link: vladivostok,
-    alt: 'Владивосток, день, люди смотрят на Золотой мост'},
-]
 
 const config = {
   inputSelector: '.popup__form-item',
@@ -39,4 +12,12 @@ const config = {
   invalidInputClass: 'popup__form-item_state_invalid'
 }
 
-export {editPopupButton, addCardPopupButton, nameInput, jobInput, cards, config}
+const configApi = {
+  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-26',
+  headers: {
+    authorization: 'a37d820a-4f35-49a2-9bb2-cba80f833b0c',
+    'Content-Type': 'application/json'
+  }
+}
+
+export {editPopupButton, profileAvatar, addCardPopupButton, nameInput, jobInput, config, configApi}
