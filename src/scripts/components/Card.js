@@ -61,6 +61,9 @@ class Card { //Инициализация класса карточки
     } else {
       this._handleCardLike()
     };
+  }
+
+  handleLikeActiveStateToggle() {                                           //Публичный метод переключения состояния кнопки лайка
     this._likeCard.classList.toggle('cards__like-button_active');
   }
 

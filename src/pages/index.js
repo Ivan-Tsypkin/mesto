@@ -6,7 +6,6 @@ import Section from "../scripts/components/Section.js";
 import PopupWithImage from "../scripts/components/PopupWithImage.js";
 import PopupWithForm from "../scripts/components/PopupWithForm.js";
 import PopupDeleteConfirm from "../scripts/components/PopupDeleteConfirm.js";
-import PopupEditAvatar from "../scripts/components/PopupEditAvatar";
 import UserInfo from "../scripts/components/UserInfo.js";
 import Api from "../scripts/components/Api.js"
 import {editPopupButton, profileAvatar, addCardPopupButton, nameInput, jobInput, config, configApi} from "../scripts/utils/constants.js";
@@ -38,20 +37,22 @@ const addCardPop = new PopupWithForm('.popup_type_new-card', (formData) => {  //
 });
 addCardPop.setEventListeners();
 
+const editProfileAvatarPop = new PopupWithForm('.popup_type_edit-avatar', (formData) => submitProfileAvatar(formData)); //Экземпляр попапа смены аватара
+editProfileAvatarPop.setEventListeners();
+
 const editProfilePop = new PopupWithForm('.popup_type_edit', (formData) => {  //Экземпляр попапа профиля
   submitProfileForm(formData);
 });
 editProfilePop.setEventListeners();
 
 const deleteCardConfirmPop = new PopupDeleteConfirm('.popup_type_delete-card-confirm', (cardId, card) => {  //Экземпляр попапа подтверждения удаления карточки
+  deleteCardConfirmPop.setSubmitButtonMassage('Удаление...')
   api.deleteCard(cardId, card)
-    .then(card.deleteCard(), deleteCardConfirmPop.close())    //Здесь после потдверждения от сервера удаления карточки, удаляем карточку.
+    .then(() => {card.deleteCard(), deleteCardConfirmPop.close()})    //Здесь после потдверждения от сервера удаления карточки, удаляем карточку.
     .catch(err => console.log(err))
+    .finally(() => {deleteCardConfirmPop.setSubmitButtonMassage('Да')})
 });
 deleteCardConfirmPop.setEventListeners();
-
-const editProfileAvatarPop = new PopupEditAvatar('.popup_type_edit-avatar', (formData) => submitProfileAvatar(formData)); //Экземпляр попапа смены аватара
-editProfileAvatarPop.setEventListeners();
 
 const userInfo = new UserInfo('.profile__name', '.profile__job', '.profile__avatar'); //Экземпляр инфо пользователя
 
@@ -63,13 +64,14 @@ function createCard(cardItem, userId) { //Функция создания кар
     () => {imagePopup.open(cardItem.link, cardItem.name)},  //Колбэк открытия фото
     () => {deleteCardConfirmPop.open(cardItem._id, card)}, //Колбэк при клике на "корзину", открываем попап удаления и передаём cardId для отправки на севрвер и объект card для вызова удаления
     () => {api.makeLike(cardItem._id)                      //Колбэк установки лайка
-      .then(res => card.setLikeNumber(res.likes.length))
+      .then(res => {card.setLikeNumber(res.likes.length), card.handleLikeActiveStateToggle()})
       .catch(err => console.log(err))
     },
     () => {api.makeUnlike(cardItem._id)                    //Колбэк снятия лайка
       .then(res => {if (res.likes.length === 0) {
         card.setLikeNumber('')
-      } else {card.setLikeNumber(res.likes.length)}
+      } else {card.setLikeNumber(res.likes.length)};
+      card.handleLikeActiveStateToggle();
       })
       .catch(err => console.log(err))
     }
@@ -83,8 +85,8 @@ function cardGenerator(cardItem, userId) {  //Функция добавлени�
 }
 
 function submitProfileForm (data) { //Функция сабмита сохранения профиля
+  editProfilePop.setSubmitButtonMassage('Сохранение...')
   api.editUserInfo(data)
-    .then(editProfilePop.setSubmitButtonMassage('Сохранение...'))
     .then(res => {
       const data = {
         userName: res.name,
@@ -92,12 +94,12 @@ function submitProfileForm (data) { //Функция сабмита сохран
       };
       userInfo.setUserInfo(data)})
     .catch(err => console.log(err))
-    .finally(editProfilePop.close(), editProfilePop.setSubmitButtonMassage('Сохранить'))
+    .finally(() => {editProfilePop.close(), editProfilePop.setSubmitButtonMassage('Сохранить')})
 }
 
 function submitProfileAvatar (data) {  //Функция сабмита сохранения аватара
+  editProfileAvatarPop.setSubmitButtonMassage('Сохранение...')
   api.editUserAvatar(data)
-    .then(editProfileAvatarPop.setSubmitButtonMassage('Сохранение...'))
     .then(res => {
       const data = {
         userAvatar: res.avatar,
@@ -105,15 +107,15 @@ function submitProfileAvatar (data) {  //Функция сабмита сохр�
       userInfo.setUserAvatar(data)
     })
     .catch(err => console.log(err))
-    .finally(editProfileAvatarPop.close(), editProfileAvatarPop.setSubmitButtonMassage('Сохранить'))
+    .finally(() => {editProfileAvatarPop.close(), editProfileAvatarPop.setSubmitButtonMassage('Сохранить')})
 }
 
 function submitAddCardForm (data) {  //Функция сабмита сохранения карточки
+  addCardPop.setSubmitButtonMassage('Создание...')
   api.postCard(data)
-    .then(addCardPop.setSubmitButtonMassage('Сохранение...'))
     .then(res => cardGenerator(res, res.owner._id))       //Т.к. добавленная нами карточка по умолчанию имеет наш id автора, то можно его взять из ответа сервера
     .catch(err => console.log(err))
-    .finally(addCardPop.close(), addCardPop.setSubmitButtonMassage('Создать'), addCardFormValidator.resetValidation())
+    .finally(() => {addCardPop.close(), addCardPop.setSubmitButtonMassage('Создать'), addCardFormValidator.resetValidation()})
 }
 
 //======================================================================================================================================================================//
