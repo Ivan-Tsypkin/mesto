@@ -92,9 +92,11 @@ function submitProfileForm (data) { //Функция сабмита сохран
         userName: res.name,
         userJob: res.about,
       };
-      userInfo.setUserInfo(data)})
+      userInfo.setUserInfo(data)
+      editProfilePop.close()}
+      )
     .catch(err => console.log(err))
-    .finally(() => {editProfilePop.close(), editProfilePop.setSubmitButtonMassage('Сохранить')})
+    .finally(() => {editProfilePop.setSubmitButtonMassage('Сохранить')})
 }
 
 function submitProfileAvatar (data) {  //Функция сабмита сохранения аватара
@@ -105,17 +107,21 @@ function submitProfileAvatar (data) {  //Функция сабмита сохр�
         userAvatar: res.avatar,
       };
       userInfo.setUserAvatar(data)
+      editProfileAvatarPop.close()
     })
     .catch(err => console.log(err))
-    .finally(() => {editProfileAvatarPop.close(), editProfileAvatarPop.setSubmitButtonMassage('Сохранить')})
+    .finally(() => {editProfileAvatarPop.setSubmitButtonMassage('Сохранить')})
 }
 
 function submitAddCardForm (data) {  //Функция сабмита сохранения карточки
   addCardPop.setSubmitButtonMassage('Создание...')
   api.postCard(data)
-    .then(res => cardGenerator(res, res.owner._id))       //Т.к. добавленная нами карточка по умолчанию имеет наш id автора, то можно его взять из ответа сервера
+    .then(res => {
+      cardGenerator(res, res.owner._id)   //Т.к. добавленная нами карточка по умолчанию имеет наш id автора, то можно его взять из ответа сервера
+      addCardPop.close()
+    })
     .catch(err => console.log(err))
-    .finally(() => {addCardPop.close(), addCardPop.setSubmitButtonMassage('Создать'), addCardFormValidator.resetValidation()})
+    .finally(() => {addCardPop.setSubmitButtonMassage('Создать'), addCardFormValidator.resetValidation()})
 }
 
 //======================================================================================================================================================================//
